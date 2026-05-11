@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     agent_kill_switch: bool = False
     database_url: str = "sqlite:///./data/agent.db"
 
+    # Google Calendar OAuth user-flow settings
+    google_calendar_credentials_json: str = ""
+    google_calendar_id: str = "primary"
+    google_impersonated_user: str = ""
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 

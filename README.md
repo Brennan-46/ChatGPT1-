@@ -28,3 +28,8 @@ uvicorn app.api.main:app --reload
 ```bash
 pytest -q
 ```
+
+
+## Google Calendar OAuth user flow
+
+Set `GOOGLE_CALENDAR_CREDENTIALS_JSON` to authorized-user JSON from Google OAuth token exchange and set `GOOGLE_CALENDAR_ID` (default `primary`).
