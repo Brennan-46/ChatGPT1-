@@ -32,37 +32,14 @@ Set `TENANT_API_KEYS_JSON` as JSON map:
 }
 ```
 
-## Rate limiter behavior
-
-- Redis-backed limiter is required by default.
-- If Redis is unavailable and `RATE_LIMITER_FAIL_OPEN=false`, requests fail closed with `503`.
-- Dev fallback can be enabled with `RATE_LIMITER_FAIL_OPEN=true`.
-
-## Staging deployment
+## Staging deployment + go-live gate
 
 ```bash
 docker compose -f docker-compose.staging.yml up --build -d
 ./scripts/staging_migrate.sh
-```
-
-## Backup / restore
-
-```bash
-./scripts/backup_db.sh ./backups
-./scripts/restore_db.sh ./backups/<file>.sql
-```
-
-## Smoke and UAT
-
-```bash
 API_KEY=your-key ./scripts/smoke_staging.sh
 TENANT_API_KEYS_JSON='{"tenant-a":{"active_key":"..."},"tenant-b":{"active_key":"..."}}' ./scripts/uat_go_live.sh
+./scripts/go_live_gate.sh
 ```
 
 Complete `UAT_SIGNOFF.md` and review `ROLLBACK_PLAN.md` before production cutover.
-
-## Run tests
-
-```bash
-pytest -q
-```

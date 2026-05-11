@@ -20,3 +20,5 @@ jobs:
         run: pytest -q
       - name: Release preflight script
         run: ./scripts/preflight_release.sh
+      - name: Checklist lint
+        run: python scripts/checklist_verify.py || true
