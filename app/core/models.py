@@ -33,3 +33,8 @@ class AgentRunStatusResponse(BaseModel):
     status: str
     stop_reason: str
     trace: list[str] = Field(default_factory=list)
+
+
+class AuditEventsResponse(BaseModel):
+    run_id: str
+    events: list[str] = Field(default_factory=list)

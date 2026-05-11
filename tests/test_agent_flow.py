@@ -13,7 +13,7 @@ def test_run_agent_low_risk_completes():
     assert body['status'] == 'completed'
 
 
-def test_run_agent_delete_requires_approval():
+def test_run_agent_delete_requires_approval_and_audit():
     response = client.post('/v1/agent/run', json={'user_id': 'u1', 'prompt': 'Delete all meetings'})
     assert response.status_code == 200
     body = response.json()
@@ -23,3 +23,7 @@ def test_run_agent_delete_requires_approval():
     approval = client.post(f"/v1/agent/runs/{body['run_id']}/approve", json={'approved': False, 'approver_id': 'manager-1'})
     assert approval.status_code == 200
     assert approval.json()['decision'] == 'denied'
+
+    audit = client.get(f"/v1/agent/runs/{body['run_id']}/audit")
+    assert audit.status_code == 200
+    assert any(event == 'approval:denied' for event in audit.json()['events'])

@@ -14,13 +14,14 @@ uvicorn app.api.main:app --reload
 - `GET /v1/health`
 - `POST /v1/agent/run`
 - `GET /v1/agent/runs/{run_id}`
+- `GET /v1/agent/runs/{run_id}/audit`
 - `POST /v1/agent/runs/{run_id}/approve`
 
-## What changed in this step
+## Production-hardening added in this step
 
-- Persisted run status and pending approvals in SQLite (`data/agent.db`) via SQLAlchemy.
-- Added audit-event persistence for approval decisions.
-- Kept HITL policy gate for destructive verbs.
+- Database engine now uses configurable `DATABASE_URL` (instead of hardcoded path).
+- Added durable audit retrieval endpoint for operator visibility.
+- Added Google Calendar integration module scaffold with least-privilege behavior (find/create only, no delete API).
 
 ## Run tests
 

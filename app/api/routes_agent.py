@@ -2,7 +2,13 @@ from fastapi import APIRouter, HTTPException
 
 from app.core.agent_core import AgentCore
 from app.core.db import SessionLocal
-from app.core.models import AgentRunRequest, AgentRunResponse, AgentRunStatusResponse, ApprovalRequest
+from app.core.models import (
+    AgentRunRequest,
+    AgentRunResponse,
+    AgentRunStatusResponse,
+    ApprovalRequest,
+    AuditEventsResponse,
+)
 from app.core.run_store import SQLRunStore
 
 router = APIRouter()
@@ -23,6 +29,16 @@ def run_status(run_id: str) -> AgentRunStatusResponse:
             raise HTTPException(status_code=404, detail="Run not found")
         trace = record.trace.split("|") if record.trace else []
         return AgentRunStatusResponse(run_id=record.run_id, status=record.status, stop_reason=record.stop_reason, trace=trace)
+
+
+@router.get("/agent/runs/{run_id}/audit", response_model=AuditEventsResponse)
+def run_audit(run_id: str) -> AuditEventsResponse:
+    with SessionLocal() as session:
+        store = SQLRunStore(session)
+        record = store.get_run(run_id)
+        if not record:
+            raise HTTPException(status_code=404, detail="Run not found")
+        return AuditEventsResponse(run_id=run_id, events=store.list_audit_events(run_id))
 
 
 @router.post("/agent/runs/{run_id}/approve")
