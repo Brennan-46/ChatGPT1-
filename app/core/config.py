@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     max_tool_calls_per_run: int = 20
     max_runtime_seconds: int = 90
     agent_kill_switch: bool = False
+    database_url: str = "sqlite:///./data/agent.db"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

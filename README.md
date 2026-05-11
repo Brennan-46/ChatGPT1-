@@ -16,6 +16,12 @@ uvicorn app.api.main:app --reload
 - `GET /v1/agent/runs/{run_id}`
 - `POST /v1/agent/runs/{run_id}/approve`
 
+## What changed in this step
+
+- Persisted run status and pending approvals in SQLite (`data/agent.db`) via SQLAlchemy.
+- Added audit-event persistence for approval decisions.
+- Kept HITL policy gate for destructive verbs.
+
 ## Run tests
 
 ```bash
